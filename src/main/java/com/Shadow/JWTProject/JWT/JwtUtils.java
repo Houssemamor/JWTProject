@@ -1,13 +1,24 @@
 package com.Shadow.JWTProject.JWT;
 
-import org.hibernate.engine.jdbc.env.internal.LobCreationLogging_.logger;
-import org.springframework.stereotype.Component;
+import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
+
+import com.Shadow.JWTProject.services.UserDetailsImp;
 
 @Component
 public class JwtUtils {
-    private static final logger LOGGER = LobCreationLogging_.loggerFactory.getLogger(JwtUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
 
     @Value("${ahlem.app.jwtsecret}")
     private String jwtSecret;
@@ -21,7 +32,8 @@ public class JwtUtils {
 
     public String generateTokenFromUsername(String username) {
         return Jwts.builder().setSubject(username).setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
