@@ -3,8 +3,9 @@ package com.Shadow.JWTProject.entities;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.Shadow.JWTProject.models.User;
+
 @Entity
-@Table(name = "customers")
 public class Customer extends User {
 
     private String address;
