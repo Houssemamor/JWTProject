@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Modifier Produit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+</head>
+<body>
+<div class="container my-5">
+    <h3>Modifier Produit</h3>
+    <div class="card">
+        <div class="card-body">
+            <div class="col-md-10">
+                <form th:action="@{/products/update}" th:object="${productForm}" method="post">
+                    <div class="row">
+                        <div class="form-group col-md-8">
+                            <label for="name" class="col-form-label">Nom</label>
+                            <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Nom du produit" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="price" class="col-form-label">Prix</label>
+                            <input type="number" step="0.01" th:field="*{price}" class="form-control" id="price" placeholder="Prix" />
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="description" class="col-form-label">Description</label>
+                            <textarea th:field="*{description}" class="form-control" id="description" placeholder="Description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label class="col-form-label">Sous-catégorie</label>
+                            <select th:field="*{subcategory.id}" class="form-control">
+                                <option value="">Sélectionner une sous-catégorie</option>
+                                <option th:each="sub : ${listSubcategories}"
+                                        th:value="${sub.id}"
+                                        th:text="${sub.title}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label class="col-form-label">Fournisseur</label>
+                            <select th:field="*{provider.id}" class="form-control">
+                                <option value="">Sélectionner un fournisseur</option>
+                                <option th:each="pro : ${listProviders}"
+                                        th:value="${pro.id}"
+                                        th:text="${pro.name}"></option>
+                            </select>
+                        </div>
+                        <input type="hidden" th:field="*{id}">
+                        <div class="col-md-6 mt-3">
+                            <input type="submit" class="btn btn-primary" value="Modifier">
+                            <a th:href="@{/products/all}" class="btn btn-secondary">Annuler</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

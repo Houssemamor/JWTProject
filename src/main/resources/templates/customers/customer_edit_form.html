@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Modifier Client</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+</head>
+<body>
+<div class="container my-5">
+    <h3>Modifier Client</h3>
+    <div class="card">
+        <div class="card-body">
+            <div class="col-md-10">
+                <form th:action="@{/customers/update}" th:object="${customerForm}" method="post" onsubmit="return validatePasswords()">
+                    <input type="hidden" th:field="*{id}">
+                    <input type="hidden" th:field="*{password}" id="existingPassword">
+
+                    <div class="row">
+                        <!-- Name -->
+                        <div class="form-group col-md-8">
+                            <label for="name">Nom</label>
+                            <input type="text" th:field="*{name}" class="form-control" id="name" required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group col-md-8">
+                            <label for="email">Email</label>
+                            <input type="email" th:field="*{email}" class="form-control" id="email" required>
+                        </div>
+
+                        <!-- New Password -->
+                        <div class="form-group col-md-8">
+                            <label for="passwordNew">Nouveau mot de passe (laisser vide pour conserver l'ancien)</label>
+                            <input type="password" class="form-control" id="passwordNew" placeholder="Mot de passe">
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="form-group col-md-8">
+                            <label for="confirmPassword">Confirmer le mot de passe</label>
+                            <input type="password" class="form-control" id="confirmPassword">
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="form-group col-md-8">
+                            <label for="phone">Téléphone</label>
+                            <input type="text" th:field="*{phone}" class="form-control" id="phone">
+                        </div>
+
+                        <!-- Age -->
+                        <div class="form-group col-md-8">
+                            <label for="age">Âge</label>
+                            <input type="number" min="0" th:field="*{age}" class="form-control" id="age">
+                        </div>
+
+                        <!-- Salary -->
+                        <div class="form-group col-md-8">
+                            <label for="salary">Salaire</label>
+                            <input type="number" step="0.01" th:field="*{salary}" class="form-control" id="salary">
+                        </div>
+
+                        <!-- Address -->
+                        <div class="form-group col-md-8">
+                            <label for="address">Adresse</label>
+                            <input type="text" th:field="*{address}" class="form-control" id="address">
+                        </div>
+
+                        <!-- City -->
+                        <div class="form-group col-md-8">
+                            <label for="city">Ville</label>
+                            <input type="text" th:field="*{city}" class="form-control" id="city">
+                        </div>
+
+                        <div class="col-md-6 mt-3">
+                            <input type="submit" class="btn btn-success" value="Modifier">
+                            <a th:href="@{/customers/all}" class="btn btn-secondary">Annuler</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validatePasswords() {
+        const pwdNew = document.getElementById("passwordNew").value;
+        const confirm = document.getElementById("confirmPassword").value;
+        const existing = document.getElementById("existingPassword");
+
+        if (pwdNew || confirm) {
+            if (pwdNew !== confirm) {
+                alert("Les mots de passe ne correspondent pas !");
+                return false;
+            }
+            existing.value = pwdNew;
+        }
+        return true;
+    }
+</script>
+</body>
+</html>

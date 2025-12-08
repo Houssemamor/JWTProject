@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+
+    <style>
+        /* Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f8;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 240px;
+            height: 100%;
+            background: #2c3e50;
+            color: #ecf0f1;
+            overflow-y: auto;
+            padding-top: 30px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar h5 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.3em;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .sidebar hr {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            margin: 15px 0;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 14px 25px;
+            color: #bdc3c7;
+            text-decoration: none;
+            font-size: 0.95em;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .sidebar a span.icon {
+            width: 22px;
+            display: inline-block;
+            text-align: center;
+            margin-right: 12px;
+            font-size: 1.1em;
+        }
+
+        .sidebar a:hover {
+            background: #34495e;
+            color: #fff;
+            border-left: 4px solid #1abc9c;
+        }
+
+        .sidebar a.active {
+            background: #1abc9c;
+            color: #fff;
+            border-left: 4px solid #16a085;
+        }
+
+        /* Main content */
+        .content {
+            margin-left: 240px;
+            padding: 30px;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Card */
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; padding-top: 10px; }
+            .content { margin-left: 0; padding: 20px; }
+            .sidebar a { padding: 10px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h5>Admin Panel</h5>
+    <hr />
+    <a th:href="@{/products/all}"><span class="icon"><i class="fas fa-box"></i></span> Products</a>
+    <a th:href="@{/categories/all}"><span class="icon"><i class="fas fa-list"></i></span> Categories</a>
+    <a th:href="@{/subcategories/all}"><span class="icon"><i class="fas fa-list-alt"></i></span> Subcategories</a>
+    <a th:href="@{/providers/all}"><span class="icon"><i class="fas fa-truck"></i></span> Providers</a>
+    <a th:href="@{/customers/all}"><span class="icon"><i class="fas fa-user"></i></span> Customers</a>
+    <a th:href="@{/orders/all}"><span class="icon"><i class="fas fa-shopping-cart"></i></span> Orders</a>
+</div>
+
+<main class="content">
+    <div layout:fragment="content">
+        <div class="card">
+            <h2>Welcome to Admin Dashboard</h2>
+        </div>
+    </div>
+</main>
+
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+<!-- Dynamic active sidebar item -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const currentPath = window.location.pathname;
+        const sidebarLinks = document.querySelectorAll('.sidebar a');
+
+        sidebarLinks.forEach(link => {
+            link.classList.remove('active'); // remove previous
+            const linkPath = link.getAttribute('href');
+
+            // If current path starts with the link href, mark as active
+            if (currentPath.startsWith(linkPath.replace(window.location.origin, ''))) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

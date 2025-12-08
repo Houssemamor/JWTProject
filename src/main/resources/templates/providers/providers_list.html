@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Liste des Fournisseurs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container my-2">
+        <div class="card">
+            <div class="card-body">
+                <div th:switch="${listProviders}" class="container my-5">
+                    <p class="my-5">
+                        <a href="/providers/add" class="btn btn-primary">
+                            <i class="fas fa-plus ml-2">Ajouter Fournisseur</i>
+                        </a>
+                    </p>
+                    <div class="col-md-12">
+                        <h2 th:case="null">Aucun fournisseur trouvé !!</h2>
+                        <div th:case="*">
+                            <table class="table table-striped table-responsive-md">
+                                <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Entreprise</th>
+                                    <th>Service</th>
+                                    <th>Modifier</th>
+                                    <th>Supprimer</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="provider : ${listProviders}">
+                                    <td th:text="${provider.name}"></td>
+                                    <td th:text="${provider.email}"></td>
+                                    <td th:text="${provider.company}"></td>
+                                    <td th:text="${provider.service}"></td>
+                                    <td>
+                                        <a th:href="@{/providers/edit/{id}(id=${provider.id})}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Modifier
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{/providers/delete/{id}(id=${provider.id})}" class="btn btn-danger btn-sm"
+                                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce fournisseur ?')">
+                                            <i class="fas fa-trash"></i> Supprimer
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
