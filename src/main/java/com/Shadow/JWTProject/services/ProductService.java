@@ -18,7 +18,9 @@ public class ProductService {
     }
 
     public List<Product> getAllProducts() {
-        return repo.findAll();
+        // Use custom query with eager loading to prevent LazyInitializationException
+        // when accessing subcategory and provider in the view template.
+        return repo.findAllWithRelations();
     }
 
     public Product getById(Long id) {

@@ -1,157 +1,205 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      th:with="
+                requestUri=${requestUri},
+                isAuthPage=${isAuthPage},
+                isAuthenticated=${isAuthenticated},
+                isElevated=${isElevated}
+      ">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Admin Panel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
 
     <style>
-        /* Reset */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f4f6f8;
         }
 
-        /* Sidebar */
+        .app-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
         .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
             width: 240px;
-            height: 100%;
             background: #2c3e50;
             color: #ecf0f1;
             overflow-y: auto;
-            padding-top: 30px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            z-index: 1000;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.08);
+            flex: 0 0 240px;
         }
 
-        .sidebar h5 {
+        .sidebar-title {
             text-align: center;
-            margin-bottom: 25px;
-            font-size: 1.3em;
-            font-weight: bold;
-            letter-spacing: 1px;
+            margin: 0 0 14px 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
             color: #fff;
         }
 
-        .sidebar hr {
-            border: none;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            margin: 15px 0;
+        .sidebar-section {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.15);
         }
 
         .sidebar a {
             display: flex;
             align-items: center;
-            padding: 14px 25px;
+            padding: 12px 18px;
             color: #bdc3c7;
             text-decoration: none;
-            font-size: 0.95em;
+            font-size: 0.95rem;
             border-left: 4px solid transparent;
-            transition: all 0.3s ease;
-            border-radius: 4px 0 0 4px;
+            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
         }
 
-        .sidebar a span.icon {
+        .sidebar a .icon {
             width: 22px;
             display: inline-block;
             text-align: center;
             margin-right: 12px;
-            font-size: 1.1em;
+            font-size: 1rem;
         }
 
         .sidebar a:hover {
             background: #34495e;
             color: #fff;
-            border-left: 4px solid #1abc9c;
+            border-left-color: #1abc9c;
         }
 
         .sidebar a.active {
             background: #1abc9c;
             color: #fff;
-            border-left: 4px solid #16a085;
+            border-left-color: #16a085;
         }
 
-        /* Main content */
+        .main {
+            flex: 1 1 auto;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            background: #ffffff;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            padding: 12px 18px;
+        }
+
         .content {
-            margin-left: 240px;
-            padding: 30px;
-            min-height: 100vh;
-            transition: margin-left 0.3s ease;
+            padding: 22px;
+            flex: 1 1 auto;
         }
 
-        /* Card */
-        .card {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.05);
-            padding: 25px;
-            margin-bottom: 20px;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .sidebar { width: 100%; height: auto; position: relative; padding-top: 10px; }
-            .content { margin-left: 0; padding: 20px; }
-            .sidebar a { padding: 10px 15px; }
+            .app-shell {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                flex: 0 0 auto;
+                box-shadow: none;
+            }
+            .content {
+                padding: 16px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="sidebar">
-    <h5>Admin Panel</h5>
-    <hr />
-    <a th:href="@{/products/all}"><span class="icon"><i class="fas fa-box"></i></span> Products</a>
-    <a th:href="@{/categories/all}"><span class="icon"><i class="fas fa-list"></i></span> Categories</a>
-    <a th:href="@{/subcategories/all}"><span class="icon"><i class="fas fa-list-alt"></i></span> Subcategories</a>
-    <a th:href="@{/providers/all}"><span class="icon"><i class="fas fa-truck"></i></span> Providers</a>
-    <a th:href="@{/customers/all}"><span class="icon"><i class="fas fa-user"></i></span> Customers</a>
-    <a th:href="@{/orders/all}"><span class="icon"><i class="fas fa-shopping-cart"></i></span> Orders</a>
+<div class="app-shell">
+    <aside class="sidebar" th:if="${!isAuthPage}">
+        <div class="sidebar-title">Dashboard</div>
+
+        <a th:href="@{/products/all}"
+           th:classappend="${requestUri.startsWith('/products') ? ' active' : ''}">
+            <span class="icon"><i class="fas fa-box"></i></span>
+            <span>Products</span>
+        </a>
+        <a th:href="@{/categories/all}"
+           th:classappend="${requestUri.startsWith('/categories') ? ' active' : ''}">
+            <span class="icon"><i class="fas fa-list"></i></span>
+            <span>Categories</span>
+        </a>
+        <a th:href="@{/subcategories/all}"
+           th:classappend="${requestUri.startsWith('/subcategories') ? ' active' : ''}">
+            <span class="icon"><i class="fas fa-list-alt"></i></span>
+            <span>Subcategories</span>
+        </a>
+        <a th:href="@{/providers/all}"
+           th:classappend="${requestUri.startsWith('/providers') ? ' active' : ''}">
+            <span class="icon"><i class="fas fa-truck"></i></span>
+            <span>Providers</span>
+        </a>
+        <a th:href="@{/customers/all}"
+           th:classappend="${requestUri.startsWith('/customers') ? ' active' : ''}">
+            <span class="icon"><i class="fas fa-user"></i></span>
+            <span>Customers</span>
+        </a>
+        <a th:href="@{/orders/all}"
+           th:classappend="${requestUri.startsWith('/orders') ? ' active' : ''}">
+            <span class="icon"><i class="fas fa-shopping-cart"></i></span>
+            <span>Orders</span>
+        </a>
+
+        <div class="sidebar-section" th:if="${isElevated}">
+            <a th:href="@{/products/add}"
+               th:classappend="${requestUri.startsWith('/products/add') ? ' active' : ''}">
+                <span class="icon"><i class="fas fa-plus"></i></span>
+                <span>Add product</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="main">
+        <header class="topbar">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <a class="text-dark font-weight-bold" th:href="@{/}">JWTProject</a>
+                    <span class="text-muted" th:if="${!isAuthPage}">/</span>
+                    <span class="text-muted" th:if="${!isAuthPage}" th:text="${requestUri}"></span>
+                </div>
+
+                <div class="d-flex align-items-center" th:if="${isAuthenticated}">
+                    <span class="text-muted mr-3">
+                        Signed in as <strong th:text="${#request.userPrincipal.name}">user</strong>
+                    </span>
+                    <form th:action="@{/logout}" method="post" class="m-0">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </header>
+
+        <main class="content">
+            <div layout:fragment="content">
+                <div class="container">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="h5 mb-0">Welcome</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
 </div>
 
-<main class="content">
-    <div layout:fragment="content">
-        <div class="card">
-            <h2>Welcome to Admin Dashboard</h2>
-        </div>
-    </div>
-</main>
-
-<!-- JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-
-<!-- Dynamic active sidebar item -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const currentPath = window.location.pathname;
-        const sidebarLinks = document.querySelectorAll('.sidebar a');
-
-        sidebarLinks.forEach(link => {
-            link.classList.remove('active'); // remove previous
-            const linkPath = link.getAttribute('href');
-
-            // If current path starts with the link href, mark as active
-            if (currentPath.startsWith(linkPath.replace(window.location.origin, ''))) {
-                link.classList.add('active');
-            }
-        });
-    });
-</script>
 
 </body>
 </html>
