@@ -20,7 +20,7 @@ import com.Shadow.JWTProject.services.UserDetailsImp;
 public class JwtUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("${ahlem.app.jwtsecret}")
+    @Value("${ahlem.app.jwtSecret}")
     private String jwtSecret;
 
     @Value("${ahlem.app.jwtExpirationMs}")
