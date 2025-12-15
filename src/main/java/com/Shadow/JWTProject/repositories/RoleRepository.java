@@ -11,5 +11,6 @@ import com.Shadow.JWTProject.models.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
     Optional<Role> findByName(ERole name);
-
+    
+    boolean existsByName(ERole name);
 }
